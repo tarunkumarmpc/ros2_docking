@@ -1,4 +1,5 @@
-//working
+// DockPilot Perception Node
+// AprilTag detection + multi-method PnP + EKF pose estimator
 
 #include <memory>
 #include <vector>
@@ -68,7 +69,7 @@ public:
     declare_parameter<double>("detection_timeout",0.5);
     declare_parameter<double>("max_orientation_jump", 0.15);
     declare_parameter<double>("orientation_smoothing", 0.3);
-    declare_parameter<int>("required_detections", 20);
+    declare_parameter<int>("required_detections", 5);   // 5 frames (~0.17s @ 30fps) for fast cold-start
     declare_parameter<double>("reprojection_error_threshold", 5.0);
     declare_parameter<bool>("enable_epnp", true);
     declare_parameter<double>("motion_threshold", 0.5);

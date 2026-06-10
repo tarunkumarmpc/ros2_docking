@@ -82,7 +82,7 @@ public:
         tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
         timer_ = create_wall_timer(
-            std::chrono::milliseconds(200),
+            std::chrono::milliseconds(50),   // 20 Hz — matches docking server loop rate
             [this]() {
                 init_controller_once();
                 controlLoop();
@@ -163,9 +163,9 @@ private:
         double ex = marker_robot.pose.position.x - goal.pose.position.x;
         double ey = marker_robot.pose.position.y - goal.pose.position.y;
 
-        RCLCPP_INFO(this->get_logger(), "Marker position: x=%.3f, y=%.3f", marker_robot.pose.position.x, marker_robot.pose.position.y);
-        RCLCPP_INFO(this->get_logger(), "Goal position: x=%.3f, y=%.3f", goal.pose.position.x, goal.pose.position.y);
-        RCLCPP_INFO(this->get_logger(), "Error ex: %.3f, ey: %.3f", ex, ey);
+        RCLCPP_DEBUG(this->get_logger(), "Marker position: x=%.3f, y=%.3f", marker_robot.pose.position.x, marker_robot.pose.position.y);
+        RCLCPP_DEBUG(this->get_logger(), "Goal position: x=%.3f, y=%.3f", goal.pose.position.x, goal.pose.position.y);
+        RCLCPP_DEBUG(this->get_logger(), "Error ex: %.3f, ey: %.3f", ex, ey);
 
         // Compute yaw angles and wrap them
         tf2::Quaternion q_goal, q_now;
@@ -190,11 +190,11 @@ private:
         yaw_g = wrapAngleRad(yaw_g);
         yaw_n = wrapAngleRad(yaw_n);
 
-        RCLCPP_INFO(this->get_logger(), "Wrapped yaw_g: %.3f rad (%.3f deg), yaw_n: %.3f rad (%.3f deg)",
+        RCLCPP_DEBUG(this->get_logger(), "Wrapped yaw_g: %.3f rad (%.3f deg), yaw_n: %.3f rad (%.3f deg)",
                     yaw_g, RAD2DEG(yaw_g), yaw_n, RAD2DEG(yaw_n));
 
         double yaw_error = shortest_angular_distance(yaw_n, yaw_g);
-        RCLCPP_INFO(this->get_logger(), "Yaw error: %.3f rad (%.3f deg)", yaw_error, RAD2DEG(yaw_error));
+        RCLCPP_DEBUG(this->get_logger(), "Yaw error: %.3f rad (%.3f deg)", yaw_error, RAD2DEG(yaw_error));
 
         // Pack into Pose for Controller
         geometry_msgs::msg::Pose error;
@@ -237,7 +237,7 @@ private:
     std::mutex mtx_;
     std::atomic<bool> active_;
     rclcpp::TimerBase::SharedPtr timer_;
-    bool smooth_undocking_;
+    bool smooth_undocking_ = false;  // reserved for future smooth undock motion
     std::string base_frame_;
     double marker_timeout_;
 };

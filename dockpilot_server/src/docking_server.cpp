@@ -335,6 +335,12 @@ private:
   /* ---------- rolling stats ---------- */
   RollingSigma roll_x_, roll_y_, roll_yaw_;
 
+  /* ---------- concurrency guard ---------- */
+  std::atomic<bool> docking_in_progress_{false};
+
+  /* ---------- shutdown flag for diagnostics thread ---------- */
+  std::atomic<bool> shutdown_{false};
+
   /* ---------- methods ---------- */
   std::tuple<double, double, double> adaptiveTolerance(double d, double ex, double ey,
                                                        double eyaw);
@@ -425,8 +431,15 @@ DockingServer::DockingServer()
 
   dock_action_server_ = rclcpp_action::create_server<Dock>(
       this, "dock",
-      [](const rclcpp_action::GoalUUID &, std::shared_ptr<const Dock::Goal>)
-      { return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE; },
+      [this](const rclcpp_action::GoalUUID &, std::shared_ptr<const Dock::Goal>)
+      {
+        if (docking_in_progress_.load())
+        {
+          RCLCPP_WARN(get_logger(), "Dock goal rejected: docking already in progress");
+          return rclcpp_action::GoalResponse::REJECT;
+        }
+        return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
+      },
       [](const std::shared_ptr<GoalHandleDock>)
       { return rclcpp_action::CancelResponse::ACCEPT; },
       [this](const std::shared_ptr<GoalHandleDock> gh)
@@ -436,8 +449,15 @@ DockingServer::DockingServer()
 
   undock_action_server_ = rclcpp_action::create_server<Undock>(
       this, "undock",
-      [](const rclcpp_action::GoalUUID &, std::shared_ptr<const Undock::Goal>)
-      { return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE; },
+      [this](const rclcpp_action::GoalUUID &, std::shared_ptr<const Undock::Goal>)
+      {
+        if (docking_in_progress_.load())
+        {
+          RCLCPP_WARN(get_logger(), "Undock goal rejected: docking already in progress");
+          return rclcpp_action::GoalResponse::REJECT;
+        }
+        return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
+      },
       [](const std::shared_ptr<GoalHandleUndock>)
       { return rclcpp_action::CancelResponse::ACCEPT; },
       [this](const std::shared_ptr<GoalHandleUndock> gh)
@@ -454,6 +474,7 @@ DockingServer::DockingServer()
 
 DockingServer::~DockingServer()
 {
+  shutdown_.store(true);
   if (diagnostics_thread_.joinable()) diagnostics_thread_.join();
 }
 
@@ -673,6 +694,7 @@ void DockingServer::executeDock(std::shared_ptr<GoalHandleDock> gh)
 {
   const auto goal = gh->get_goal();
   RCLCPP_INFO(get_logger(), "Docking started for '%s'", goal->dock_id.c_str());
+  docking_in_progress_.store(true);
 
   auto result = std::make_shared<Dock::Result>();
   rclcpp::Rate loop(20);
@@ -890,6 +912,7 @@ void DockingServer::executeDock(std::shared_ptr<GoalHandleDock> gh)
         publishStop();
         active_msg.data = false;
         docking_active_pub_->publish(active_msg);
+        docking_in_progress_.store(false);
         diag_.stage.store(static_cast<int>(DockingStage::ALIGN_Y));
         diag_.sub_stage.store(static_cast<int>(FineSubStage::NONE));
         return;
@@ -1040,7 +1063,7 @@ void DockingServer::executeUndock(std::shared_ptr<GoalHandleUndock> gh)
 void DockingServer::diagnosticsLoop()
 {
   rclcpp::Rate rate(2);
-  while (rclcpp::ok())
+  while (rclcpp::ok() && !shutdown_.load())
   {
     diagnostic_msgs::msg::DiagnosticArray da;
     da.header.stamp = now();
