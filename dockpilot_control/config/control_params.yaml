@@ -1,0 +1,4 @@
+control_node:
+  ros__parameters:
+    controller_type: "pid"  #pure_pursuit lqr
+    base_frame: "base_link"  # or "base_link", "chassis", etc.

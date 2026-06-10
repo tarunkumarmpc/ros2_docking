@@ -1,0 +1,6 @@
+perception_node:
+  ros__parameters:
+    target_id: 71
+    tag_size: 0.06
+    debug: true
+    base_frame: base_link   # <- change to "camera_link" or any frame yo

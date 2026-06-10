@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>dockpilot_perception</name>
+  <version>1.0.0</version>
+  <description>AprilTag detector node</description>
+  <maintainer email="tarunkumarmpc@github.com">tarunkumarmpc</maintainer>
+  <license>Apache-2.0</license>
+  <url type="website">https://github.com/tarunkumarmpc/ros2_docking</url>
+  <url type="bugtracker">https://github.com/tarunkumarmpc/ros2_docking/issues</url>
+  <url type="repository">https://github.com/tarunkumarmpc/ros2_docking.git</url>
+
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>apriltag_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_geometry</depend>
+  <depend>libopencv-dev</depend>
+  <depend>angles</depend>
+
+<depend>nav_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

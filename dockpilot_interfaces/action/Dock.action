@@ -1,0 +1,17 @@
+# Goal
+string dock_id
+geometry_msgs/PoseStamped target_pose
+# (Optional: remove velocity fields if not used)
+# float32 max_velocity_linear
+# float32 max_velocity_angular
+---
+# Result
+bool success
+string message
+---
+# Feedback
+geometry_msgs/PoseStamped current_robot_pose
+geometry_msgs/PoseStamped current_marker_pose
+float32 distance_to_goal
+float32 angle_error_to_goal
+

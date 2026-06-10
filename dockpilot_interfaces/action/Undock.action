@@ -1,0 +1,16 @@
+# Goal
+string dock_id
+geometry_msgs/PoseStamped target_pose      # Optional full undock target pose
+float32 distance_back                      # Fallback backward distance if target_pose not provided
+# (Optional: remove velocity fields if not used)
+# float32 max_velocity_linear
+# float32 max_velocity_angular
+---
+# Result
+bool success
+string message
+---
+# Feedback
+geometry_msgs/PoseStamped current_robot_pose
+float32 distance_remaining
+

@@ -1,0 +1,24 @@
+# dockpilot_server/config/dock_configs.yaml
+docks:
+  "71":
+    dock_pose:
+      header: {frame_id: "base_link"}
+      pose:
+        position: {x: -0.07, y: 0.0, z: 0.0}
+        yaw: -90.55          # <-- degrees, will be wrapped & converted
+    undock_pose:
+      header: {frame_id: "camera_link"}
+      pose:
+        position: {x: 2.00, y: 0.0, z: 0.0}
+        yaw: -90
+  "7":
+    dock_pose:
+      header: {frame_id: "camera_link"}
+      pose:
+        position:    {x: 0.12, y: 0.0, z: 0.0}
+        orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}
+    undock_pose:
+      header: {frame_id: "camera_link"}
+      pose:
+        position:    {x: -0.32, y: 0.0, z: 0.0}
+        orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}
