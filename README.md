@@ -1,8 +1,7 @@
-# DockPilot 🚀
 
 **Autonomous Docking Stack for ROS 2**
 
-DockPilot is a production-ready, open-source ROS 2 stack for autonomous robot docking. It provides full-stack docking capabilities — from visual fiducial detection and pose estimation through to closed-loop velocity control — all built on standard ROS 2 interfaces and designed for real-world deployment.
+DockPilot is a  ROS 2 stack for autonomous robot docking. It provides full-stack docking capabilities — from visual fiducial detection and pose estimation through to closed-loop velocity control — all built on standard ROS 2 interfaces and designed  and tested in  real-world deployment.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![ROS 2](https://img.shields.io/badge/ROS%202-Humble%20%7C%20Iron%20%7C%20Jazzy-blue)](https://docs.ros.org)
@@ -33,13 +32,13 @@ Camera → AprilTag Detection → EKF Pose Estimation → Docking Server → Vel
 
 ## Features
 
-- 🎯 **AprilTag-based docking** — tag36h11 family, robust detection at range
-- 🧮 **EKF pose fusion** — smooth, noise-robust 6-DOF marker pose estimation
-- 🔁 **Multi-dock support** — configure multiple named docking stations in YAML
-- 🎛️ **Pluggable controllers** — swap between PID, Pure Pursuit, LQR, or MPC at launch
-- 🔒 **Safety features** — slew-rate limiting, timeout watchdogs, graceful abort
-- 📡 **Standard interfaces** — all communication via standard `geometry_msgs` and `nav_msgs`
-- 🔧 **Configurable** — all parameters exposed via ROS 2 parameter server
+**AprilTag-based docking** — tag36h11 family, robust detection at range
+**EKF pose fusion** — smooth, noise-robust 6-DOF marker pose estimation
+**Multi-dock support** — configure multiple named docking stations in YAML
+**Pluggable controllers** — swap between PID, Pure Pursuit, LQR, or MPC at launch
+**Safety features** — slew-rate limiting, timeout watchdogs, graceful abort
+**Standard interfaces** — all communication via standard `geometry_msgs` and `nav_msgs`
+**Configurable** — all parameters exposed via ROS 2 parameter server
 
 ---
 
@@ -225,12 +224,6 @@ ros2 launch dockpilot_control control.launch.py controller_type:=lqr
 
 Contributions are welcome! Please open issues and pull requests on GitHub.
 
-1. [Fork the repository](https://github.com/tarunkumarmpc/ros2_docking/fork)
-2. Create a feature branch: `git checkout -b feature/my-feature`
-3. Commit your changes: `git commit -am 'Add new feature'`
-4. Push: `git push origin feature/my-feature`
-5. Open a pull request at [github.com/tarunkumarmpc/ros2_docking](https://github.com/tarunkumarmpc/ros2_docking/pulls)
-
 Please open a [GitHub Issue](https://github.com/tarunkumarmpc/ros2_docking/issues) to report bugs or request features.
 
 ---
@@ -242,11 +235,5 @@ This project is licensed under the **Apache License 2.0** — see the [LICENSE](
 ---
 
 ## Acknowledgements
-
-DockPilot builds on the excellent ROS 2 ecosystem, including `nav2`, `apriltag`, `tf2`, and `rclcpp`. Special thanks to all contributors.
-
+Thank you to ROS2 ecosystem 
 ---
-
-> 📦 **Repository**: [github.com/tarunkumarmpc/ros2_docking](https://github.com/tarunkumarmpc/ros2_docking)  
-> 🐛 **Issues**: [github.com/tarunkumarmpc/ros2_docking/issues](https://github.com/tarunkumarmpc/ros2_docking/issues)  
-> ⭐ **Star this repo** if you find it useful!
